@@ -115,6 +115,32 @@ export const PROJECTS = [
     techStack: "Next.js, TypeScript, Tailwind CSS, tRPC, Prisma, PostgreSQL, NextAuth.js, React Query"
   },
   {
+    name: "Code Editor",
+    status: "Live Demo",
+    duration: "Jan 2025 - now",
+    liveLinks: [
+      {
+        name: "Live Demo",
+        link: "https://codeeditor.ravigangwar.cv"
+      }
+    ],
+    githubLinks: [
+      {
+        name: "GitHub",
+        link: "https://github.com/ravi-gangwar/code-editor-frontend"
+      }
+    ],
+    description: "Code Editor is a secure and efficient online code execution platform that allows users to write, execute, and review code in multiple programming languages. The system provides a sandboxed execution environment with robust security measures to prevent vulnerabilities.",
+    features: [
+      "Multi-language support for Java, JavaScript, Python, and more with Monaco Editor integration",
+      "Secure execution with Docker-based sandboxing and resource limits",
+      "Real-time feedback with instant execution results, errors, and performance metrics",
+      "Code history for saving and reviewing past code submissions",
+      "Anti-cheating system with plagiarism detection and execution fingerprinting"
+    ],
+    techStack: "React.js, TypeScript, TailwindCSS, Node.js, Express.js, Docker, JWT Authentication, PostgreSQL, Monaco Editor"
+  },
+  {
     name: "GreenEarth v2",
     status: "Live",
     duration: "Oct 2023 - Feb 2024",
@@ -167,41 +193,10 @@ export const PROJECTS = [
     techStack: "MongoDB, Express.js, React.js, Node.js, JWT Authentication, Redux, Material UI, RESTful API, Stripe"
   },
   {
-    name: "Code Editor",
-    status: "Live Demo",
-    duration: "Jan 2025 - now",
-    liveLinks: [
-      {
-        name: "Live Demo",
-        link: "https://codeeditor.ravigangwar.cv"
-      }
-    ],
-    githubLinks: [
-      {
-        name: "GitHub",
-        link: "https://github.com/ravi-gangwar/code-editor-frontend"
-      }
-    ],
-    description: "Code Editor is a secure and efficient online code execution platform that allows users to write, execute, and review code in multiple programming languages. The system provides a sandboxed execution environment with robust security measures to prevent vulnerabilities.",
-    features: [
-      "Multi-language support for Java, JavaScript, Python, and more with Monaco Editor integration",
-      "Secure execution with Docker-based sandboxing and resource limits",
-      "Real-time feedback with instant execution results, errors, and performance metrics",
-      "Code history for saving and reviewing past code submissions",
-      "Anti-cheating system with plagiarism detection and execution fingerprinting"
-    ],
-    techStack: "React.js, TypeScript, TailwindCSS, Node.js, Express.js, Docker, JWT Authentication, PostgreSQL, Monaco Editor"
-  },
-  {
     name: "GuideX",
     status: "Live",
     duration: "Dec 2024 - Jan 2025",
-    liveLinks: [
-      {
-        name: "Chrome Store",
-        link: "https://chrome.google.com/webstore/detail/guidex"
-      }
-    ],
+    liveLinks: [],
     githubLinks: [
       {
         name: "GitHub",
@@ -217,6 +212,26 @@ export const PROJECTS = [
       "User scripts for creating and running custom scripts to enhance website functionality"
     ],
     techStack: "React.js, JavaScript, Chrome Extension API, HTML/CSS, Chrome Storage API, Manifest V3"
+  },
+  {
+    name: "WebWatch",
+    status: "ONGOING",
+    liveLinks: [],
+    githubLinks: [
+      {
+        name: "GitHub",
+        link: "https://github.com/ravi-gangwar/webwatch"
+      }
+    ],
+    description: "WebWatch is a web application that allows users to monitor and analyze website performance. The system provides a dashboard with real-time metrics and analytics to help users track website performance and identify issues.",
+    features: [
+      "Website monitoring for monitoring multiple websites and tracking their performance",
+      "Performance analytics for analyzing website performance metrics and identifying issues",
+      "User authentication with secure login and rate limiting",
+      "User management for managing user accounts and permissions",
+      "Notification system for sending notifications about website performance"
+    ],
+    techStack: "Next.js, Tailwind CSS, Node.js, MongoDB, tRPC, Socket.io, Real-time Analytics"
   },
   {
     name: "URL Shortener",
@@ -269,26 +284,6 @@ export const PROJECTS = [
       "User roles with Guest, User, and Admin roles with appropriate permissions"
     ],
     techStack: "Next.js, TypeScript, Tailwind CSS, MongoDB, tRPC, NextAuth.js, Rich Text Editor, Socket.io"
-  },
-  {
-    name: "WebWatch",
-    status: "ONGOING",
-    liveLinks: [],
-    githubLinks: [
-      {
-        name: "GitHub",
-        link: "https://github.com/ravi-gangwar/webwatch"
-      }
-    ],
-    description: "WebWatch is a web application that allows users to monitor and analyze website performance. The system provides a dashboard with real-time metrics and analytics to help users track website performance and identify issues.",
-    features: [
-      "Website monitoring for monitoring multiple websites and tracking their performance",
-      "Performance analytics for analyzing website performance metrics and identifying issues",
-      "User authentication with secure login and rate limiting",
-      "User management for managing user accounts and permissions",
-      "Notification system for sending notifications about website performance"
-    ],
-    techStack: "Next.js, Tailwind CSS, Node.js, MongoDB, tRPC, Socket.io, Real-time Analytics"
   }
 ];
 
@@ -518,6 +513,8 @@ export const KEYWORDS = [
   { word: "20+ Reviews", variant: "success" },
   { word: "5+ Reviews", variant: "success" },
   { word: "20%", variant: "success" },
+  { word: "reducing latency by 20%", variant: "success" },
+  { word: "reducing latency by", variant: "success" },
   { word: "35%", variant: "success" },
   { word: "99.9%", variant: "success" },
   { word: "80%", variant: "success" },
@@ -569,8 +566,8 @@ export const PROBLEM_SOLVING = {
   platforms: [
     {
       name: "LeetCode",
-      stats: "1879+ (Top 5% Worldwide)",
-      details: "Knight | 1200DaysOfCode+ | Annual Awards 2022/2023 | 1200+ problems solved | 3.5⭐ | Knight Badge"
+      stats: "",
+      details: "350+ problems solved"
     },
     {
       name: "HackerRank",

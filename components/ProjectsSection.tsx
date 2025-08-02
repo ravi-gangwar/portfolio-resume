@@ -82,7 +82,7 @@ export default function ProjectsSection() {
             {project.features && (
               <BulletList
                 items={project.features.map((feature) => (
-                  <KeywordText text={feature} />
+                  <KeywordText key={feature} text={feature} />
                 ))}
                 className="mb-2"
               />

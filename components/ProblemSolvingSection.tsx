@@ -1,7 +1,8 @@
 import { PROBLEM_SOLVING } from "@/lib/constants";
 import { Section } from "@/components/ui/section";
 import { ContentCard } from "@/components/ui/content-card";
-import { Code } from "lucide-react";
+import { LeetCodeIcon } from "@/components/ui/leetcode-icon";
+import { HackerRankIcon } from "@/components/ui/hackerrank-icon";
 
 export default function ProblemSolvingSection() {
   return (
@@ -12,7 +13,15 @@ export default function ProblemSolvingSection() {
             <div className="flex items-start gap-3 mb-2">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <Code className="w-5 h-5 text-blue-600" />
+                  {platform.name === "LeetCode" ? (
+                    <LeetCodeIcon className="w-5 h-5" />
+                  ) : platform.name === "HackerRank" ? (
+                    <HackerRankIcon className="w-5 h-5" />
+                  ) : (
+                    <div className="w-5 h-5 bg-blue-600 rounded flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">?</span>
+                    </div>
+                  )}
                   <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">
                     {platform.name}
                   </h3>

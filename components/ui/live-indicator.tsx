@@ -23,11 +23,6 @@ export function LiveIndicator({ className }: LiveIndicatorProps) {
           style={{ animationDelay: "1s" }}
         ></div>
       </div>
-
-      {/* "LIVE" text */}
-      <span className="ml-1 text-xs font-medium text-red-500 animate-pulse">
-        LIVE
-      </span>
     </div>
   );
 }
