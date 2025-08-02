@@ -1,14 +1,12 @@
-import { SUMMARY } from '@/lib/constants';
+import { SUMMARY } from "@/lib/constants";
+import { Section } from "@/components/ui/section";
 
 export default function AboutSection() {
   return (
-    <section className="bg-white rounded-lg border border-gray-100 p-6 mb-8 md:mb-12">
-      <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
-        {SUMMARY.title}
-      </h2>
-      <p className="text-gray-700 leading-relaxed text-sm md:text-base">
+    <Section title={SUMMARY.title}>
+      <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm">
         {SUMMARY.content}
       </p>
-    </section>
+    </Section>
   );
 }
