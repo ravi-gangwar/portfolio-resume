@@ -5,7 +5,7 @@ import { Code } from "lucide-react";
 
 export default function ProblemSolvingSection() {
   return (
-    <Section title={PROBLEM_SOLVING.title} className="bg-white rounded-lg p-6">
+    <Section title={PROBLEM_SOLVING.title}>
       <div className="space-y-2">
         {PROBLEM_SOLVING.platforms.map((platform, index) => (
           <ContentCard key={index} variant="gray">

@@ -1,13 +1,74 @@
 "use client";
 
-import * as React from "react";
-import { Moon, Sun } from "lucide-react";
+import React from "react";
+import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
-import { cn } from "@/lib/utils";
 
-export function ThemeToggleButton() {
+import { Button } from "@/components/ui/button";
+
+import {
+  AnimationStart,
+  AnimationVariant,
+  createAnimation,
+} from "./theme-animations";
+
+interface ThemeToggleButtonProps {
+  variant?: AnimationVariant;
+  start?: AnimationStart;
+  showLabel?: boolean;
+  url?: string;
+}
+
+export function ThemeToggleButton({
+  variant = "circle",
+  start = "center",
+  showLabel = false,
+  url = "",
+}: ThemeToggleButtonProps) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
+
+  const styleId = "theme-transition-styles";
+
+  const updateStyles = React.useCallback((css: string, name: string) => {
+    if (typeof window === "undefined") return;
+
+    let styleElement = document.getElementById(styleId) as HTMLStyleElement;
+
+    console.log("style Element", styleElement);
+    console.log("name", name);
+
+    if (!styleElement) {
+      styleElement = document.createElement("style");
+      styleElement.id = styleId;
+      document.head.appendChild(styleElement);
+    }
+
+    styleElement.textContent = css;
+
+    console.log("content updated");
+  }, []);
+
+  const toggleTheme = React.useCallback(() => {
+    const animation = createAnimation(variant, start, url);
+
+    console.log("Animation created:", animation);
+
+    updateStyles(animation.css, animation.name);
+
+    if (typeof window === "undefined") return;
+
+    const switchTheme = () => {
+      setTheme(theme === "light" ? "dark" : "light");
+    };
+
+    if (!document.startViewTransition) {
+      switchTheme();
+      return;
+    }
+
+    document.startViewTransition(switchTheme);
+  }, [theme, setTheme, variant, start, url, updateStyles]);
 
   React.useEffect(() => {
     setMounted(true);
@@ -18,17 +79,29 @@ export function ThemeToggleButton() {
   }
 
   return (
-    <button
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className={cn(
-        "fixed top-4 right-4 z-50 p-2 rounded-lg border border-gray-200 bg-white/80 backdrop-blur-sm shadow-sm transition-all duration-200 hover:shadow-md",
-        "dark:bg-gray-900/80 dark:border-gray-700"
-      )}
-      aria-label="Toggle theme"
+    <Button
+      onClick={toggleTheme}
+      variant="ghost"
+      size="icon"
+      className="fixed top-4 left-4 z-50 w-9 h-9 relative group"
+      name="Theme Toggle Button"
     >
-      <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-    </button>
+      <SunIcon className="size-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <MoonIcon className="absolute size-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <span className="sr-only">Theme Toggle </span>
+      {showLabel && (
+        <>
+          <span className="hidden group-hover:block border rounded-full px-2 absolute -top-10">
+            {" "}
+            variant = {variant}
+          </span>
+          <span className="hidden group-hover:block border rounded-full px-2 absolute -bottom-10">
+            {" "}
+            start = {start}
+          </span>
+        </>
+      )}
+    </Button>
   );
 }
 

@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import { SkiperMarquee } from "@/components/ui/skiper-marquee";
+import { SnakeGameBackground } from "@/components/ui/snake-game-background";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,10 +25,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {/* Background SkiperMarquee - Hidden on small screens */}
-          <div className="fixed inset-0 -z-10 overflow-hidden hidden md:block transform-gpu">
-            <SkiperMarquee />
-          </div>
+          {/* Background Snake Game - Hidden on small screens */}
+          <SnakeGameBackground />
           {children}
         </ThemeProvider>
       </body>

@@ -9,11 +9,11 @@ import AchievementsSection from "@/components/AchievementsSection";
 import ThemeToggleButton from "@/components/ui/theme-toggle-button";
 export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-100 dark:bg-black md:bg-zinc-100/60 md:dark:bg-black/60 md:backdrop-blur-sm">
+    <div className="min-h-screen bg-zinc-100 dark:bg-zinc-900 md:bg-zinc-100/60 md:dark:bg-zinc-900/60 md:backdrop-blur-sm">
       <ThemeToggleButton />
 
       <div className="max-w-6xl mx-auto px-4 py-8 md:px-6 md:py-12 relative z-10">
-        <div className="bg-white dark:bg-gray-900 md:bg-white/80 md:dark:bg-gray-900/80 md:backdrop-blur-md rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 p-4 md:p-6 lg:p-8">
+        <div className="bg-white dark:bg-zinc-800 md:bg-white/80 md:dark:bg-zinc-800/80 md:backdrop-blur-md rounded-xl shadow-sm border border-gray-200 dark:border-zinc-700 p-4 md:p-6 lg:p-8">
           <ResumeHeader />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:gap-4">
             {/* Left Column - Main Content */}

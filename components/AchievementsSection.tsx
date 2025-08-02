@@ -10,8 +10,8 @@ export default function AchievementsSection() {
         {ACHIEVEMENTS.map((achievement, index) => (
           <ContentCard key={index} variant="gradient">
             <div className="flex items-start gap-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Award className="w-5 h-5 text-green-600" />
+              <div className="p-2 bg-green-100/50 dark:bg-green-900/30 rounded-lg">
+                <Award className="w-5 h-5 text-green-600 dark:text-green-400" />
               </div>
               <div className="flex-1">
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">
@@ -27,7 +27,7 @@ export default function AchievementsSection() {
                     {achievement.items.map((item, idx) => (
                       <span
                         key={idx}
-                        className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium"
+                        className="inline-flex items-center gap-1 px-3 py-1 bg-green-100/50 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm font-medium"
                       >
                         <Star className="w-3 h-3" />
                         {item}

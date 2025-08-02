@@ -10,10 +10,10 @@ export interface ContentCardProps extends React.HTMLAttributes<HTMLDivElement> {
 const ContentCard = React.forwardRef<HTMLDivElement, ContentCardProps>(
   ({ children, variant = "default", className, ...props }, ref) => {
     const variantStyles = {
-      default: "bg-white dark:bg-gray-900",
-      gray: "bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700",
+      default: "bg-white dark:bg-zinc-800",
+      gray: "bg-gray-50/50 dark:bg-zinc-700/50 border border-gray-200/50 dark:border-zinc-600/50",
       gradient:
-        "bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 border border-green-200 dark:border-green-800",
+        "bg-gradient-to-r from-green-50/30 to-emerald-50/30 dark:from-green-900/10 dark:to-emerald-900/10 border border-green-200/30 dark:border-green-800/30",
     };
 
     return (
