@@ -32,8 +32,8 @@ const ContentHeader = React.forwardRef<HTMLDivElement, ContentHeaderProps>(
   ) => {
     return (
       <div ref={ref} className={cn("mb-1", className)} {...props}>
-        {/* Title and Duration */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
+        {/* Title */}
+        <div className="mb-1">
           <h3
             className={cn(
               "text-sm font-semibold text-gray-900 dark:text-gray-100",
@@ -42,20 +42,10 @@ const ContentHeader = React.forwardRef<HTMLDivElement, ContentHeaderProps>(
           >
             {title}
           </h3>
-          {duration && (
-            <div
-              className={cn(
-                "text-sm text-gray-500 dark:text-gray-400",
-                metaClassName
-              )}
-            >
-              {duration}
-            </div>
-          )}
         </div>
 
-        {/* Subtitle and Status */}
-        {(subtitle || status || links) && (
+        {/* Subtitle, Duration, and Status */}
+        {(subtitle || duration || status || links) && (
           <div className="flex flex-col sm:flex-row gap-2 text-sm mb-1">
             {subtitle && (
               <span
@@ -67,10 +57,26 @@ const ContentHeader = React.forwardRef<HTMLDivElement, ContentHeaderProps>(
                 {subtitle}
               </span>
             )}
+            {duration && (
+              <>
+                <span className="hidden sm:inline text-gray-400">•</span>
+                <span
+                  className={cn(
+                    "text-gray-500 dark:text-gray-400",
+                    metaClassName
+                  )}
+                >
+                  {duration}
+                </span>
+              </>
+            )}
             {status && (
-              <span className="text-blue-600 dark:text-blue-400 font-medium">
-                {status}
-              </span>
+              <>
+                <span className="hidden sm:inline text-gray-400">•</span>
+                <span className="text-blue-600 dark:text-blue-400 font-medium">
+                  {status}
+                </span>
+              </>
             )}
             {links && (
               <>

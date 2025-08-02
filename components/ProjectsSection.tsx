@@ -6,15 +6,15 @@ import { TechStack } from "@/components/ui/tech-stack";
 
 export default function ProjectsSection() {
   return (
-    <Section title="Projects" className="bg-white p-6">
+    <Section title="Projects">
       <div className="space-y-3">
         {PROJECTS.map((project, index) => (
-          <div key={index} className="pl-4 md:pl-6">
+          <div key={index}>
             <ContentHeader
               title={project.name}
-              status={project.status}
-              duration={project.duration}
-              links={project.links}
+              subtitle={`${project.status}${
+                project.duration ? ` • ${project.duration}` : ""
+              }${project.links ? ` • ${project.links}` : ""}`}
             />
 
             <p className="text-sm text-gray-700 dark:text-gray-300 mb-2 leading-relaxed">

@@ -18,7 +18,7 @@ const Section = React.forwardRef<HTMLElement, SectionProps>(
       <section
         ref={ref}
         className={cn(
-          "bg-white/80 dark:bg-zinc-800/80 rounded-lg p-3",
+          "bg-white/80 dark:bg-zinc-800/80 rounded-lg p-3 border-b border-gray-200/50 dark:border-zinc-700/50",
           className
         )}
         {...props}

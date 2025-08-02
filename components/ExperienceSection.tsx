@@ -10,8 +10,7 @@ export default function ExperienceSection() {
         <div key={index} className="mb-3">
           <ContentHeader
             title={job.company}
-            subtitle={`${job.position} • ${job.location}`}
-            duration={job.duration}
+            subtitle={`${job.position} • ${job.location} • ${job.duration}`}
             status={job.type}
           />
           <BulletList items={job.achievements} />
