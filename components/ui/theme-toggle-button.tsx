@@ -55,12 +55,12 @@ export function ThemeToggleButton({
       setTheme(theme === "light" ? "dark" : "light");
     };
 
-    if (!document.startViewTransition) {
+    if (!("startViewTransition" in document)) {
       switchTheme();
       return;
     }
 
-    document.startViewTransition(switchTheme);
+    (document as any).startViewTransition(switchTheme);
   }, [theme, setTheme]);
 
   React.useEffect(() => {
