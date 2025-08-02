@@ -1,10 +1,14 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { SnakeGameBackground } from "@/components/ui/snake-game-background";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
+});
 
 export const metadata: Metadata = {
   title: "Ravi Gangwar - Software Engineer & Full-Stack Developer",
@@ -28,8 +32,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <body className={poppins.className}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           {/* Background Snake Game - Hidden on small screens */}
           <SnakeGameBackground />
           {children}

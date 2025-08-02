@@ -1,5 +1,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import { LiveIndicator } from "./live-indicator";
 
 export interface ContentHeaderProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -73,17 +74,29 @@ const ContentHeader = React.forwardRef<HTMLDivElement, ContentHeaderProps>(
             {status && (
               <>
                 <span className="hidden sm:inline text-gray-400">•</span>
-                <span className="text-blue-600 dark:text-blue-400 font-medium">
-                  {status}
-                </span>
+                {status.includes("Live") ? (
+                  <div className="flex items-center gap-1">
+                    <LiveIndicator />
+                    <span className="text-blue-600 dark:text-blue-400 font-medium">
+                      {status}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-blue-600 dark:text-blue-400 font-medium">
+                    {status}
+                  </span>
+                )}
               </>
             )}
             {links && (
               <>
                 <span className="hidden sm:inline text-gray-400">•</span>
-                <span className="text-gray-600 dark:text-gray-300">
-                  {links}
-                </span>
+                <div className="flex items-center gap-1">
+                  <LiveIndicator />
+                  <span className="text-gray-600 dark:text-gray-300">
+                    {links}
+                  </span>
+                </div>
               </>
             )}
           </div>

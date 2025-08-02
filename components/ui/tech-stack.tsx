@@ -42,7 +42,10 @@ const TechStack = React.forwardRef<HTMLDivElement, TechStackProps>(
             key={idx}
             variant="secondary"
             className={cn(
-              "text-xs text-gray-700 dark:text-gray-300 mr-1 mt-1",
+              "text-xs font-medium mr-2 mb-2 px-3 py-1 rounded-full border-0 shadow-sm transition-all duration-200 hover:scale-105 hover:shadow-md",
+              "bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600",
+              "text-gray-800 dark:text-gray-200",
+              "hover:from-blue-50 hover:to-purple-50 dark:hover:from-blue-900/20 dark:hover:to-purple-900/20",
               badgeClassName
             )}
           >

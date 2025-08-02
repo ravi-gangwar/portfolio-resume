@@ -41,6 +41,17 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Footer - Powered by Ravi Gangwar 2025 */}
+      <div className="text-center py-6">
+        <div className="text-xs text-gray-400 dark:text-gray-500 font-mono">
+          Powered by{" "}
+          <span className="text-gray-600 dark:text-gray-400 font-semibold">
+            Ravi Gangwar
+          </span>{" "}
+          <span className="text-gray-500 dark:text-gray-600">2025</span>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,17 @@
 "use client";
 
 import { PERSONAL_INFO } from "@/lib/constants";
-import { Mail, Phone, Linkedin, Github, Code, Trophy } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  Linkedin,
+  Github,
+  Code,
+  Instagram,
+  Twitter,
+} from "lucide-react";
+import { LeetCodeIcon } from "@/components/ui/leetcode-icon";
+import { HackerRankIcon } from "@/components/ui/hackerrank-icon";
 
 export default function ResumeHeader() {
   return (
@@ -12,7 +22,7 @@ export default function ResumeHeader() {
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white">
               {PERSONAL_INFO.name}
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 font-medium">
+            <p className="text-sm md:text-lg text-gray-600 dark:text-gray-300 font-medium">
               {PERSONAL_INFO.title}
             </p>
             <p className="text-base text-gray-500 dark:text-gray-400">
@@ -58,14 +68,28 @@ export default function ResumeHeader() {
               className="p-2 text-gray-600 dark:text-gray-400 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-lg transition-all"
               aria-label="LeetCode"
             >
-              <Code className="w-5 h-5" />
+              <LeetCodeIcon className="w-5 h-5" />
             </a>
             <a
               href={PERSONAL_INFO.socialLinks.hackerrank}
               className="p-2 text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-all"
               aria-label="HackerRank"
             >
-              <Trophy className="w-5 h-5" />
+              <HackerRankIcon className="w-5 h-5" />
+            </a>
+            <a
+              href={PERSONAL_INFO.socialLinks.instagram}
+              className="p-2 text-gray-600 dark:text-gray-400 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-900/20 rounded-lg transition-all"
+              aria-label="Instagram"
+            >
+              <Instagram className="w-5 h-5" />
+            </a>
+            <a
+              href={PERSONAL_INFO.socialLinks.twitter}
+              className="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all"
+              aria-label="X (Twitter)"
+            >
+              <Twitter className="w-5 h-5" />
             </a>
           </div>
         </div>
