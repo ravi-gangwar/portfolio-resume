@@ -8,9 +8,6 @@ export default function ResumeHeader() {
     <div className="bg-white dark:bg-zinc-800 rounded-lg p-6 md:p-8 mb-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex-1">
-          <div className="text-sm text-gray-500 dark:text-gray-400 mb-2 md:mb-3">
-            {PERSONAL_INFO.lastUpdated}
-          </div>
           <div className="space-y-2 md:space-y-3">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white">
               {PERSONAL_INFO.name}
