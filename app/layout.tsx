@@ -14,6 +14,11 @@ export const metadata: Metadata = {
     "Software Engineer, Full-Stack Developer, React Native, Next.js, Node.js, JavaScript, TypeScript",
   authors: [{ name: "Ravi Gangwar" }],
   viewport: "width=device-width, initial-scale=1",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
