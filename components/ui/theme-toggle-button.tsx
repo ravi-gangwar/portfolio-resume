@@ -12,7 +12,7 @@ import {
   createAnimation,
 } from "./theme-animations";
 
-interface ThemeToggleButtonProps {
+interface ThemeToggleAnimationProps {
   variant?: AnimationVariant;
   start?: AnimationStart;
   showLabel?: boolean;
@@ -20,11 +20,11 @@ interface ThemeToggleButtonProps {
 }
 
 export function ThemeToggleButton({
-  variant = "circle",
+  variant = "gif",
   start = "center",
   showLabel = false,
-  url = "",
-}: ThemeToggleButtonProps) {
+  url = "https://media.giphy.com/media/ArfrRmFCzYXsC6etQX/giphy.gif",
+}: ThemeToggleAnimationProps) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
@@ -35,9 +35,6 @@ export function ThemeToggleButton({
 
     let styleElement = document.getElementById(styleId) as HTMLStyleElement;
 
-    console.log("style Element", styleElement);
-    console.log("name", name);
-
     if (!styleElement) {
       styleElement = document.createElement("style");
       styleElement.id = styleId;
@@ -45,14 +42,10 @@ export function ThemeToggleButton({
     }
 
     styleElement.textContent = css;
-
-    console.log("content updated");
   }, []);
 
   const toggleTheme = React.useCallback(() => {
     const animation = createAnimation(variant, start, url);
-
-    console.log("Animation created:", animation);
 
     updateStyles(animation.css, animation.name);
 
@@ -68,7 +61,7 @@ export function ThemeToggleButton({
     }
 
     document.startViewTransition(switchTheme);
-  }, [theme, setTheme, variant, start, url, updateStyles]);
+  }, [theme, setTheme]);
 
   React.useEffect(() => {
     setMounted(true);
@@ -83,7 +76,7 @@ export function ThemeToggleButton({
       onClick={toggleTheme}
       variant="ghost"
       size="icon"
-      className="fixed top-4 left-4 z-50 w-9 h-9 relative group"
+      className="fixed top-6 left-6 z-50 w-9 h-9 relative group"
       name="Theme Toggle Button"
     >
       <SunIcon className="size-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />

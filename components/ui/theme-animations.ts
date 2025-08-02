@@ -1,119 +1,212 @@
-export type AnimationVariant = "circle" | "gif";
-export type AnimationStart = "center" | "top" | "bottom" | "left" | "right";
+export type AnimationVariant = "circle" | "circle-blur" | "polygon" | "gif"
+export type AnimationStart =
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right"
+  | "center"
 
 interface Animation {
-  css: string;
-  name: string;
+  name: string
+  css: string
 }
 
-export function createAnimation(
+const getPositionCoords = (position: AnimationStart) => {
+  switch (position) {
+    case "top-left":
+      return { cx: "0", cy: "0" }
+    case "top-right":
+      return { cx: "40", cy: "0" }
+    case "bottom-left":
+      return { cx: "0", cy: "40" }
+    case "bottom-right":
+      return { cx: "40", cy: "40" }
+  }
+}
+
+const generateSVG = (variant: AnimationVariant, start: AnimationStart) => {
+  if (start === "center") return
+
+  const positionCoords = getPositionCoords(start)
+  if (!positionCoords) {
+    throw new Error(`Invalid start position: ${start}`)
+  }
+  const { cx, cy } = positionCoords
+
+  if (variant === "circle") {
+    return `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="${cx}" cy="${cy}" r="20" fill="white"/></svg>`
+  }
+
+  if (variant === "circle-blur") {
+    return `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><defs><filter id="blur"><feGaussianBlur stdDeviation="2"/></filter></defs><circle cx="${cx}" cy="${cy}" r="18" fill="white" filter="url(%23blur)"/></svg>`
+  }
+
+  return ""
+}
+
+const getTransformOrigin = (start: AnimationStart) => {
+  switch (start) {
+    case "top-left":
+      return "top left"
+    case "top-right":
+      return "top right"
+    case "bottom-left":
+      return "bottom left"
+    case "bottom-right":
+      return "bottom right"
+  }
+}
+
+export const createAnimation = (
   variant: AnimationVariant,
   start: AnimationStart,
-  url: string
-): Animation {
-  if (variant === "gif") {
-    return createGifAnimation(start, url);
+  url?: string
+): Animation => {
+  const svg = generateSVG(variant, start)
+  const transformOrigin = getTransformOrigin(start)
+
+  if (variant === "polygon") {
+    return {
+      name: `${variant}-${start}`,
+      css: `
+       ::view-transition-group(root) {
+        animation-duration: 0.7s;
+        animation-timing-function: var(--expo-out);
+      }
+            
+      ::view-transition-new(root) {
+        animation-name: reveal-light;
+      }
+
+      ::view-transition-old(root),
+      .dark::view-transition-old(root) {
+        animation: none;
+        z-index: -1;
+      }
+      .dark::view-transition-new(root) {
+        animation-name: reveal-dark;
+      }
+
+      @keyframes reveal-dark {
+        from {
+          clip-path: polygon(50% -71%, -50% 71%, -50% 71%, 50% -71%);
+        }
+        to {
+          clip-path: polygon(50% -71%, -50% 71%, 50% 171%, 171% 50%);
+        }
+      }
+
+      @keyframes reveal-light {
+        from {
+          clip-path: polygon(171% 50%, 50% 171%, 50% 171%, 171% 50%);
+        }
+        to {
+          clip-path: polygon(171% 50%, 50% 171%, -50% 71%, 50% -71%);
+        }
+      }
+      `,
+    }
   }
-  return createCircleAnimation(start);
+  if (variant === "circle" && start == "center") {
+    return {
+      name: `${variant}-${start}`,
+      css: `
+       ::view-transition-group(root) {
+        animation-duration: 0.7s;
+        animation-timing-function: var(--expo-out);
+      }
+            
+      ::view-transition-new(root) {
+        animation-name: reveal-light;
+      }
+
+      ::view-transition-old(root),
+      .dark::view-transition-old(root) {
+        animation: none;
+        z-index: -1;
+      }
+      .dark::view-transition-new(root) {
+        animation-name: reveal-dark;
+      }
+
+      @keyframes reveal-dark {
+        from {
+          clip-path: circle(0% at 50% 50%);
+        }
+        to {
+          clip-path: circle(100.0% at 50% 50%);
+        }
+      }
+
+      @keyframes reveal-light {
+        from {
+           clip-path: circle(0% at 50% 50%);
+        }
+        to {
+          clip-path: circle(100.0% at 50% 50%);
+        }
+      }
+      `,
+    }
+  }
+  if (variant === "gif") {
+    return {
+      name: `${variant}-${start}`,
+      css: `
+      ::view-transition-group(root) {
+  animation-timing-function: var(--expo-in);
 }
 
-function createGifAnimation(start: AnimationStart, url: string): Animation {
-  const positions = {
-    center: "50% 50%",
-    top: "50% 0%",
-    bottom: "50% 100%",
-    left: "0% 50%",
-    right: "100% 50%",
-  };
-
-  const css = `
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-      animation: none;
-      mix-blend-mode: normal;
-    }
-
-    ::view-transition-old(root) {
-      z-index: 1;
-    }
-
-    ::view-transition-new(root) {
-      z-index: 999;
-    }
-
-    ::view-transition-old(root)::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: url("${url}") center/contain no-repeat;
-      background-position: ${positions[start]};
-      z-index: 999;
-      animation: dance 0.5s ease-in-out;
-    }
-
-    @keyframes dance {
-      0% {
-        transform: scale(0) rotate(0deg);
-        opacity: 0;
-      }
-      50% {
-        transform: scale(1.2) rotate(180deg);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(1) rotate(360deg);
-        opacity: 0;
-      }
-    }
-  `;
-
-  return { css, name: "gif-dance" };
+::view-transition-new(root) {
+  mask: url('${url}') center / 0 no-repeat;
+  animation: scale 3s;
 }
 
-function createCircleAnimation(start: AnimationStart): Animation {
-  const positions = {
-    center: "50% 50%",
-    top: "50% 0%",
-    bottom: "50% 100%",
-    left: "0% 50%",
-    right: "100% 50%",
-  };
+::view-transition-old(root),
+.dark::view-transition-old(root) {
+  animation: scale 3s;
+}
 
-  const css = `
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-      animation: none;
-      mix-blend-mode: normal;
+@keyframes scale {
+  0% {
+    mask-size: 0;
+  }
+  10% {
+    mask-size: 50vmax;
+  }
+  90% {
+    mask-size: 50vmax;
+  }
+  100% {
+    mask-size: 2000vmax;
+  }
+}`,
     }
+  }
 
-    ::view-transition-old(root) {
-      z-index: 1;
-    }
-
-    ::view-transition-new(root) {
-      z-index: 999;
-    }
-
-    ::view-transition-old(root)::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at ${positions[start]}, #00d184 0%, transparent 50%);
-      z-index: 999;
-      animation: circle-expand 0.5s ease-out;
-    }
-
-    @keyframes circle-expand {
-      0% {
-        transform: scale(0);
-        opacity: 1;
+  return {
+    name: `${variant}-${start}`,
+    css: `
+      ::view-transition-group(root) {
+        animation-timing-function: var(--expo-out);
       }
-      100% {
-        transform: scale(4);
-        opacity: 0;
+      ::view-transition-new(root) {
+        mask: url('${svg}') ${start.replace("-", " ")} / 0 no-repeat;
+        mask-origin: content-box;
+        animation: scale-${start} 1s;
+        transform-origin: ${transformOrigin};
       }
-    }
-  `;
-
-  return { css, name: "circle-expand" };
+      ::view-transition-old(root),
+      .dark::view-transition-old(root) {
+        animation: scale-${start} 1s;
+        transform-origin: ${transformOrigin};
+        z-index: -1;
+      }
+      @keyframes scale-${start} {
+        to {
+          mask-size: 350vmax;
+        }
+      }
+    `,
+  }
 } 
