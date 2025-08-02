@@ -14,14 +14,14 @@ export default function Home() {
       <ThemeToggleButton />
 
       {/* Last Updated - Top Right */}
-      <div className="fixed top-2 right-2 z-50">
+      <div className="fixed top-2 right-2 z-40">
         <div className="text-xs text-gray-400 dark:text-gray-500 font-mono">
           {PERSONAL_INFO.lastUpdated}
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-8 md:px-6 md:py-12 relative z-10">
-        <div className="bg-white dark:bg-zinc-800 md:bg-white/80 md:dark:bg-zinc-800/80 md:backdrop-blur-md rounded-xl shadow-sm border border-gray-200 dark:border-zinc-700 p-4 md:p-6 lg:p-8">
+      <div className="w-full px-2 py-4 md:max-w-6xl md:mx-auto md:px-6 md:py-12 relative z-10">
+        <div className="bg-white dark:bg-zinc-800 md:bg-white/80 md:dark:bg-zinc-800/80 md:backdrop-blur-md rounded-xl shadow-sm border border-gray-200 dark:border-zinc-700 p-3 md:p-6 lg:p-8">
           <ResumeHeader />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:gap-4">
             {/* Left Column - Main Content */}
