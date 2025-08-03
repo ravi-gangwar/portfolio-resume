@@ -12,11 +12,7 @@ export function KeywordText({ text, className }: KeywordTextProps) {
 
     KEYWORDS.forEach(({ word, variant }) => {
       const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      // Try with word boundaries first, then without if it doesn't match
-      let regex = new RegExp(`\\b${escapedWord}\\b`, "gi");
-      if (!regex.test(highlightedContent)) {
-        regex = new RegExp(escapedWord, "gi");
-      }
+      const regex = new RegExp(`\\b${escapedWord}\\b`, "gi");
       highlightedContent = highlightedContent.replace(regex, (match) => {
         return `<keyword data-variant="${variant}">${match}</keyword>`;
       });

@@ -72,31 +72,29 @@ export function ThemeToggleButton({
   }
 
   return (
-    <div className="fixed top-2 left-2 z-[9999]">
-      <Button
-        onClick={toggleTheme}
-        variant="ghost"
-        size="icon"
-        className="w-10 h-10 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-md border border-gray-200 dark:border-zinc-700 shadow-lg hover:bg-white dark:hover:bg-zinc-800 transition-all"
-        name="Theme Toggle Button"
-      >
-        <SunIcon className="size-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-        <MoonIcon className="absolute size-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-        <span className="sr-only">Theme Toggle </span>
-        {showLabel && (
-          <>
-            <span className="hidden group-hover:block border rounded-full px-2 absolute -top-10">
-              {" "}
-              variant = {variant}
-            </span>
-            <span className="hidden group-hover:block border rounded-full px-2 absolute -bottom-10">
-              {" "}
-              start = {start}
-            </span>
-          </>
-        )}
-      </Button>
-    </div>
+    <Button
+      onClick={toggleTheme}
+      variant="ghost"
+      size="icon"
+      className="fixed top-6 left-6 z-50 w-9 h-9 relative group"
+      name="Theme Toggle Button"
+    >
+      <SunIcon className="size-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <MoonIcon className="absolute size-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <span className="sr-only">Theme Toggle </span>
+      {showLabel && (
+        <>
+          <span className="hidden group-hover:block border rounded-full px-2 absolute -top-10">
+            {" "}
+            variant = {variant}
+          </span>
+          <span className="hidden group-hover:block border rounded-full px-2 absolute -bottom-10">
+            {" "}
+            start = {start}
+          </span>
+        </>
+      )}
+    </Button>
   );
 }
 
