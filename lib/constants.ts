@@ -569,13 +569,13 @@ export const PROBLEM_SOLVING = {
   platforms: [
     {
       name: "LeetCode",
-      stats: "1879+ (Top 5% Worldwide)",
-      details: "Knight | 1200DaysOfCode+ | Annual Awards 2022/2023 | 1200+ problems solved | 3.5⭐ | Knight Badge"
+      stats: "350+ problems solved",
+      details: ""
     },
     {
       name: "HackerRank",
       stats: "5 Stars (C, Javascript, Problem Solving)",
-      details: "500+ problems solved | 6⭐ Problem Solving"
+      details: "500+ problems solved | 5⭐ Problem Solving"
     }
   ]
 };
