@@ -158,7 +158,7 @@ export default function VoiceChat({ className }: VoiceChatProps) {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/api/mcp", {
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL || "", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
