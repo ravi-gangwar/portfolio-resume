@@ -173,7 +173,7 @@ export const PROJECTS = [
     liveLinks: [
       {
         name: "Live Demo",
-        link: "https://codeeditor.ravigangwar.cv"
+        link: "https://code.ravigangwar.cv"
       }
     ],
     githubLinks: [
