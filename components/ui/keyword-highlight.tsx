@@ -12,16 +12,8 @@ export function KeywordHighlight({
   className,
   variant = "primary",
 }: KeywordHighlightProps) {
-  const variantStyles = {
-    primary: "font-bold text-blue-600 dark:text-blue-400",
-    secondary: "font-bold text-purple-600 dark:text-purple-400",
-    accent: "font-bold text-emerald-600 dark:text-emerald-400",
-    success: "font-bold text-green-600 dark:text-green-400",
-    warning: "font-bold text-orange-600 dark:text-orange-400",
-  };
-
   return (
-    <span className={cn("font-bold", variantStyles[variant], className)}>
+    <span className={cn("font-bold text-black dark:text-white", className)}>
       {children}
     </span>
   );
@@ -80,7 +72,6 @@ export function highlightKeywords(text: string) {
     { word: "Information Technology", variant: "warning" as const },
     { word: "CGPA: 7.2", variant: "warning" as const },
     { word: "Data Structure & Algorithms", variant: "warning" as const },
-    { word: "OOPs", variant: "warning" as const },
   ];
 
   let highlightedText = text;

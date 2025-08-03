@@ -15,23 +15,23 @@ import { HackerRankIcon } from "@/components/ui/hackerrank-icon";
 
 export default function ResumeHeader() {
   return (
-    <div className="bg-white dark:bg-zinc-800 rounded-lg p-6 md:p-8 mb-8">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div className="bg-white dark:bg-zinc-800 rounded-lg p-4 md:p-6 lg:p-8 mb-6 md:mb-8">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-4">
         <div className="flex-1">
-          <div className="space-y-2 md:space-y-3">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white">
+          <div className="space-y-1 md:space-y-2 lg:space-y-3">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-900 dark:text-white">
               {PERSONAL_INFO.name}
             </h1>
-            <p className="text-sm md:text-lg text-gray-600 dark:text-gray-300 font-medium">
+            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 dark:text-gray-300 font-medium leading-tight">
               {PERSONAL_INFO.title}
             </p>
-            <p className="text-base text-gray-500 dark:text-gray-400">
+            <p className="text-sm md:text-base text-gray-500 dark:text-gray-400">
               {PERSONAL_INFO.location}
             </p>
           </div>
         </div>
-        <div className="flex flex-col gap-3 md:gap-4 md:items-end">
-          <div className="flex flex-col sm:flex-row gap-3 text-sm">
+        <div className="flex flex-col gap-2 md:gap-3 lg:gap-4 md:items-end">
+          <div className="flex flex-col sm:flex-row gap-2 md:gap-3 text-sm">
             <a
               href={`mailto:${PERSONAL_INFO.email}`}
               className="flex items-center gap-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
@@ -48,7 +48,7 @@ export default function ResumeHeader() {
             </a>
           </div>
 
-          <div className="flex gap-3 md:gap-4">
+          <div className="flex gap-2 md:gap-3 lg:gap-4">
             <a
               href={PERSONAL_INFO.socialLinks.linkedin}
               className="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all"

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Mic,
@@ -11,6 +11,8 @@ import {
   MessageCircle,
   RefreshCw,
   Settings,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -45,12 +47,18 @@ export function VoiceControls({
   status,
   className,
 }: VoiceControlsProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <div className={`fixed bottom-6 right-6 z-40 ${className}`}>
       {/* Status Indicator */}
       {status && (
         <motion.div
-          className="absolute -top-16 right-0 bg-black/90 text-white px-4 py-2 rounded-full text-sm whitespace-nowrap backdrop-blur-sm shadow-lg"
+          className="absolute -top-16 right-0 bg-black/90 text-white px-4 py-2 rounded-full text-sm whitespace-nowrap backdrop-blur-sm shadow-lg hidden md:block"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
@@ -152,48 +160,126 @@ export function VoiceControls({
         )}
       </motion.div>
 
-      {/* Control Buttons */}
-      <motion.div className="flex flex-col gap-3 mt-4 items-end">
-        <Button
-          onClick={onToggleMute}
-          variant="ghost"
-          size="icon"
-          className="w-14 h-14 rounded-full bg-white/90 dark:bg-zinc-800/90 hover:bg-white dark:hover:bg-zinc-800 shadow-lg border border-gray-200 dark:border-zinc-700 backdrop-blur-sm"
-        >
-          {isMuted ? (
-            <VolumeX className="w-5 h-5" />
-          ) : (
-            <Volume2 className="w-5 h-5" />
-          )}
-        </Button>
-
-        <Button
-          onClick={onToggleSettings}
-          variant="ghost"
-          size="icon"
-          className="w-14 h-14 rounded-full bg-white/90 dark:bg-zinc-800/90 hover:bg-white dark:hover:bg-zinc-800 shadow-lg border border-gray-200 dark:border-zinc-700 backdrop-blur-sm"
-        >
-          <Settings className="w-5 h-5" />
-        </Button>
-
-        <Button
-          onClick={onToggleChat}
-          variant="ghost"
-          size="icon"
-          className="w-14 h-14 rounded-full bg-white/90 dark:bg-zinc-800/90 hover:bg-white dark:hover:bg-zinc-800 shadow-lg border border-gray-200 dark:border-zinc-700 backdrop-blur-sm"
-        >
-          <MessageCircle className="w-5 h-5" />
-        </Button>
-
-        <Button
-          onClick={onRefresh}
-          variant="ghost"
-          size="icon"
-          className="w-14 h-14 rounded-full bg-white/90 dark:bg-zinc-800/90 hover:bg-white dark:hover:bg-zinc-800 shadow-lg border border-gray-200 dark:border-zinc-700 backdrop-blur-sm"
-        >
-          <RefreshCw className="w-5 h-5" />
-        </Button>
+      {/* Expand/Collapse Toggle Button */}
+      <motion.div className="flex justify-end mt-3">
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Button
+            onClick={toggleExpanded}
+            variant="ghost"
+            size="icon"
+            className="w-10 h-10 rounded-full bg-white/90 dark:bg-zinc-800/90 hover:bg-white dark:hover:bg-zinc-800 shadow-lg border border-gray-200 dark:border-zinc-700 backdrop-blur-sm"
+          >
+            <AnimatePresence mode="wait">
+              {isExpanded ? (
+                <motion.div
+                  key="up"
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: 180 }}
+                  exit={{ rotate: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronUp className="w-4 h-4" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="down"
+                  initial={{ rotate: 180 }}
+                  animate={{ rotate: 0 }}
+                  exit={{ rotate: 180 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronDown className="w-4 h-4" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </Button>
+        </motion.div>
       </motion.div>
+
+      {/* Control Buttons */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            className="flex flex-col gap-3 mt-3 items-end"
+            initial={{ opacity: 0, height: 0, scale: 0.8 }}
+            animate={{ opacity: 1, height: "auto", scale: 1 }}
+            exit={{ opacity: 0, height: 0, scale: 0.8 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button
+                onClick={onToggleMute}
+                variant="ghost"
+                size="icon"
+                className="w-14 h-14 rounded-full bg-white/90 dark:bg-zinc-800/90 hover:bg-white dark:hover:bg-zinc-800 shadow-lg border border-gray-200 dark:border-zinc-700 backdrop-blur-sm"
+              >
+                {isMuted ? (
+                  <VolumeX className="w-5 h-5" />
+                ) : (
+                  <Volume2 className="w-5 h-5" />
+                )}
+              </Button>
+            </motion.div>
+
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button
+                onClick={onToggleSettings}
+                variant="ghost"
+                size="icon"
+                className="w-14 h-14 rounded-full bg-white/90 dark:bg-zinc-800/90 hover:bg-white dark:hover:bg-zinc-800 shadow-lg border border-gray-200 dark:border-zinc-700 backdrop-blur-sm"
+              >
+                <Settings className="w-5 h-5" />
+              </Button>
+            </motion.div>
+
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button
+                onClick={onToggleChat}
+                variant="ghost"
+                size="icon"
+                className="w-14 h-14 rounded-full bg-white/90 dark:bg-zinc-800/90 hover:bg-white dark:hover:bg-zinc-800 shadow-lg border border-gray-200 dark:border-zinc-700 backdrop-blur-sm"
+              >
+                <MessageCircle className="w-5 h-5" />
+              </Button>
+            </motion.div>
+
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Button
+                onClick={onRefresh}
+                variant="ghost"
+                size="icon"
+                className="w-14 h-14 rounded-full bg-white/90 dark:bg-zinc-800/90 hover:bg-white dark:hover:bg-zinc-800 shadow-lg border border-gray-200 dark:border-zinc-700 backdrop-blur-sm"
+              >
+                <RefreshCw className="w-5 h-5" />
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

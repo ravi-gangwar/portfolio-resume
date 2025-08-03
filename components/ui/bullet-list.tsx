@@ -47,15 +47,7 @@ const BulletList = React.forwardRef<HTMLUListElement, BulletListProps>(
                   __html: item.replace(
                     /<keyword data-variant="(\w+)">(.*?)<\/keyword>/g,
                     (match, variant, text) => {
-                      return `<span class="font-bold ${
-                        variant === "primary"
-                          ? "text-blue-600 dark:text-blue-400"
-                          : variant === "secondary"
-                          ? "text-purple-600 dark:text-purple-400"
-                          : variant === "accent"
-                          ? "text-emerald-600 dark:text-emerald-400"
-                          : "text-green-600 dark:text-green-400"
-                      }">${text}</span>`;
+                      return `<span class="font-bold text-black dark:text-white">${text}</span>`;
                     }
                   ),
                 }}
