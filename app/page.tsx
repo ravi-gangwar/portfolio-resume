@@ -9,6 +9,7 @@ import AchievementsSection from "@/components/AchievementsSection";
 import ThemeToggleButton from "@/components/ui/theme-toggle-button";
 import VoiceChat from "@/components/VoiceChat";
 import { PERSONAL_INFO } from "@/lib/constants";
+
 export default function Home() {
   return (
     <>
