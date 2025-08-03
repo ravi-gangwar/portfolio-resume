@@ -26,6 +26,8 @@ interface MCPResponse {
   action: "speak" | "redirect";
   audio?: string;
   url?: string;
+  audioData?: string; // Base64 encoded audio data
+  audioSize?: number;
 }
 
 interface ChatMessage {
@@ -156,7 +158,7 @@ export default function VoiceChat({ className }: VoiceChatProps) {
     }
 
     try {
-      const response = await fetch("/api/mcp", {
+      const response = await fetch("http://localhost:5001/api/mcp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -195,12 +197,20 @@ export default function VoiceChat({ className }: VoiceChatProps) {
       if (data.action === "redirect" && data.url) {
         // Play the response first, then redirect after completion
         console.log("Speaking redirect response:", data.audio);
-        await speakResponse(data.audio || "");
+        if (data.audioData) {
+          await playAudioFromBase64(data.audioData);
+        } else {
+          await speakResponse(data.audio || "");
+        }
         // Redirect after audio is complete
         window.open(data.url, "_blank");
       } else if (data.action === "speak" && data.audio) {
         console.log("Speaking response:", data.audio);
-        await speakResponse(data.audio);
+        if (data.audioData) {
+          await playAudioFromBase64(data.audioData);
+        } else {
+          await speakResponse(data.audio || "");
+        }
       }
     } catch (error) {
       // Stop processing audio on error
@@ -229,6 +239,47 @@ export default function VoiceChat({ className }: VoiceChatProps) {
       await speakResponse(errorMessage);
     } finally {
       setIsLoading(false);
+      setStatus("✨ Ready to chat with Tanya!");
+    }
+  };
+
+  const playAudioFromBase64 = async (base64Audio: string): Promise<void> => {
+    if (isMuted) return;
+
+    setIsPlaying(true);
+    setIsSpeaking(true);
+    setStatus("🔊 Tanya is speaking to you...");
+
+    try {
+      // Convert base64 to blob
+      const binaryString = atob(base64Audio);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      const blob = new Blob([bytes], { type: "audio/wav" });
+
+      // Create audio element and play
+      const audio = new Audio(URL.createObjectURL(blob));
+
+      await new Promise((resolve, reject) => {
+        audio.onended = () => {
+          URL.revokeObjectURL(audio.src);
+          resolve(undefined);
+        };
+        audio.onerror = (error) => {
+          URL.revokeObjectURL(audio.src);
+          reject(error);
+        };
+        audio.play().catch(reject);
+      });
+    } catch (error) {
+      console.error("Failed to play audio from base64:", error);
+      setError("Audio playback failed, but you can still chat with Tanya!");
+      setStatus("🔇 Audio error");
+    } finally {
+      setIsPlaying(false);
+      setIsSpeaking(false);
       setStatus("✨ Ready to chat with Tanya!");
     }
   };
@@ -457,13 +508,11 @@ export default function VoiceChat({ className }: VoiceChatProps) {
       </div>
 
       {/* Mobile Layout */}
-      <div
-        className={`md:hidden fixed bottom-4 left-4 right-4 z-50 ${className}`}
-      >
+      <div className={`md:hidden fixed bottom-4 right-4 z-50 ${className}`}>
         {/* Status Indicator for Mobile */}
         {status && (
           <motion.div
-            className="mb-4 bg-black/90 text-white px-4 py-2 rounded-full text-sm whitespace-nowrap backdrop-blur-sm shadow-lg mx-auto w-fit"
+            className="absolute -top-16 right-0 bg-black/90 text-white px-4 py-2 rounded-full text-sm whitespace-nowrap backdrop-blur-sm shadow-lg"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
@@ -475,147 +524,137 @@ export default function VoiceChat({ className }: VoiceChatProps) {
           </motion.div>
         )}
 
-        {/* Glassmorphism Container */}
+        {/* Main Voice Button */}
         <motion.div
-          className="bg-white/10 dark:bg-black/20 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/10 shadow-2xl p-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 300 }}
+          className="relative"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          <div className="flex items-center justify-between gap-3">
-            {/* Main Voice Button */}
-            <motion.div
-              className="relative"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button
-                onClick={toggleListening}
-                disabled={isLoading || isInitializing}
-                className={`w-16 h-16 rounded-full shadow-xl border-2 ${
-                  isListening
-                    ? "bg-red-500 hover:bg-red-600 text-white border-red-600"
-                    : isProcessing
-                    ? "bg-orange-500 hover:bg-orange-600 text-white border-orange-600"
-                    : isSpeaking
-                    ? "bg-green-500 hover:bg-green-600 text-white border-green-600"
-                    : "bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white border-pink-600"
-                } transition-all duration-300`}
-              >
-                <AnimatePresence mode="wait">
-                  {isLoading ? (
-                    <motion.div
-                      key="loading"
-                      initial={{ rotate: 0 }}
-                      animate={{ rotate: 360 }}
-                      transition={{
-                        duration: 1,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                    >
-                      <Loader2 className="w-6 h-6" />
-                    </motion.div>
-                  ) : isInitializing ? (
-                    <motion.div
-                      key="initializing"
-                      initial={{ rotate: 0 }}
-                      animate={{ rotate: 360 }}
-                      transition={{
-                        duration: 1,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
-                    >
-                      <Loader2 className="w-6 h-6" />
-                    </motion.div>
-                  ) : isProcessing ? (
-                    <motion.div
-                      key="processing"
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                      <Loader2 className="w-6 h-6" />
-                    </motion.div>
-                  ) : isSpeaking ? (
-                    <motion.div
-                      key="speaking"
-                      animate={{ scale: [1, 1.1, 1] }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                    >
-                      <Volume2 className="w-6 h-6" />
-                    </motion.div>
-                  ) : isListening ? (
-                    <motion.div
-                      key="listening"
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                    >
-                      <MicOff className="w-6 h-6" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="ready"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      <Mic className="w-6 h-6" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </Button>
-
-              {/* Listening Animation */}
-              {(isListening || isProcessing || isSpeaking) && (
+          <Button
+            onClick={toggleListening}
+            disabled={isLoading || isInitializing}
+            className={`w-16 h-16 rounded-full shadow-xl border-2 ${
+              isListening
+                ? "bg-red-500 hover:bg-red-600 text-white border-red-600"
+                : isProcessing
+                ? "bg-orange-500 hover:bg-orange-600 text-white border-orange-600"
+                : isSpeaking
+                ? "bg-green-500 hover:bg-green-600 text-white border-green-600"
+                : "bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white border-pink-600"
+            } transition-all duration-300`}
+          >
+            <AnimatePresence mode="wait">
+              {isLoading ? (
                 <motion.div
-                  className={`absolute inset-0 rounded-full border-4 ${
-                    isListening
-                      ? "border-pink-400"
-                      : isProcessing
-                      ? "border-orange-400"
-                      : "border-green-400"
-                  }`}
-                  animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
+                  key="loading"
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 1,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                >
+                  <Loader2 className="w-6 h-6" />
+                </motion.div>
+              ) : isInitializing ? (
+                <motion.div
+                  key="initializing"
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 1,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                >
+                  <Loader2 className="w-6 h-6" />
+                </motion.div>
+              ) : isProcessing ? (
+                <motion.div
+                  key="processing"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                >
+                  <Loader2 className="w-6 h-6" />
+                </motion.div>
+              ) : isSpeaking ? (
+                <motion.div
+                  key="speaking"
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                >
+                  <Volume2 className="w-6 h-6" />
+                </motion.div>
+              ) : isListening ? (
+                <motion.div
+                  key="listening"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                >
+                  <MicOff className="w-6 h-6" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="ready"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Mic className="w-6 h-6" />
+                </motion.div>
               )}
-            </motion.div>
+            </AnimatePresence>
+          </Button>
 
-            {/* Control Buttons */}
-            <div className="flex items-center gap-2">
-              <Button
-                onClick={toggleMute}
-                variant="ghost"
-                size="icon"
-                className="w-12 h-12 rounded-full bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 border border-white/20 dark:border-white/10"
-              >
-                {isMuted ? (
-                  <VolumeX className="w-4 h-4" />
-                ) : (
-                  <Volume2 className="w-4 h-4" />
-                )}
-              </Button>
+          {/* Listening Animation */}
+          {(isListening || isProcessing || isSpeaking) && (
+            <motion.div
+              className={`absolute inset-0 rounded-full border-4 ${
+                isListening
+                  ? "border-pink-400"
+                  : isProcessing
+                  ? "border-orange-400"
+                  : "border-green-400"
+              }`}
+              animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          )}
+        </motion.div>
 
-              <Button
-                onClick={toggleChat}
-                variant="ghost"
-                size="icon"
-                className="w-12 h-12 rounded-full bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 border border-white/20 dark:border-white/10"
-              >
-                <MessageCircle className="w-4 h-4" />
-              </Button>
+        {/* Control Buttons */}
+        <motion.div className="flex flex-col gap-3 mt-4 items-end">
+          <Button
+            onClick={toggleMute}
+            variant="ghost"
+            size="icon"
+            className="w-12 h-12 rounded-full bg-white/90 dark:bg-zinc-800/90 hover:bg-white dark:hover:bg-zinc-800 shadow-lg border border-gray-200 dark:border-zinc-700 backdrop-blur-sm"
+          >
+            {isMuted ? (
+              <VolumeX className="w-4 h-4" />
+            ) : (
+              <Volume2 className="w-4 h-4" />
+            )}
+          </Button>
 
-              <Button
-                onClick={refreshPage}
-                variant="ghost"
-                size="icon"
-                className="w-12 h-12 rounded-full bg-white/20 dark:bg-black/20 hover:bg-white/30 dark:hover:bg-black/30 border border-white/20 dark:border-white/10"
-              >
-                <RefreshCw className="w-4 h-4" />
-              </Button>
-            </div>
-          </div>
+          <Button
+            onClick={toggleChat}
+            variant="ghost"
+            size="icon"
+            className="w-12 h-12 rounded-full bg-white/90 dark:bg-zinc-800/90 hover:bg-white dark:hover:bg-zinc-800 shadow-lg border border-gray-200 dark:border-zinc-700 backdrop-blur-sm"
+          >
+            <MessageCircle className="w-4 h-4" />
+          </Button>
+
+          <Button
+            onClick={refreshPage}
+            variant="ghost"
+            size="icon"
+            className="w-12 h-12 rounded-full bg-white/90 dark:bg-zinc-800/90 hover:bg-white dark:hover:bg-zinc-800 shadow-lg border border-gray-200 dark:border-zinc-700 backdrop-blur-sm"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </Button>
         </motion.div>
       </div>
 
@@ -623,7 +662,7 @@ export default function VoiceChat({ className }: VoiceChatProps) {
       <AnimatePresence>
         {showChat && (
           <motion.div
-            className="fixed inset-4 md:inset-auto md:bottom-20 md:right-6 md:w-80 md:h-96 bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-zinc-700 z-40"
+            className="fixed bottom-20 right-4 md:right-6 w-80 h-96 bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-zinc-700 z-40"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
@@ -680,10 +719,10 @@ export default function VoiceChat({ className }: VoiceChatProps) {
       {/* Error Display */}
       {error && (
         <motion.div
-          className="fixed top-4 left-4 right-4 md:left-auto md:right-6 md:w-80 bg-red-500 text-white p-4 rounded-lg shadow-lg z-50"
-          initial={{ opacity: 0, x: -100 }}
+          className="fixed top-4 right-4 md:right-6 w-80 bg-red-500 text-white p-4 rounded-lg shadow-lg z-50"
+          initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -100 }}
+          exit={{ opacity: 0, x: 100 }}
         >
           <div className="flex items-center gap-2">
             <AlertCircle className="w-4 h-4" />

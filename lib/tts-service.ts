@@ -21,25 +21,10 @@ class TTSService {
       await this.playCustomAudio('initializing');
       console.log("TTS Service: Initializing audio completed");
       
-      // Test the TTS API to ensure it's working
-      console.log("TTS Service: Testing TTS API...");
-      const response = await fetch('/api/tts', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ text: 'Hello darling' }),
-      });
-
-      if (response.ok) {
-        this.isInitialized = true;
-        this.useServerTTS = true;
-        console.log("TTS Service: Kokoro TTS API initialized successfully");
-      } else {
-        console.warn("TTS Service: TTS API not available, using browser fallback");
-        this.isInitialized = true;
-        this.useServerTTS = false;
-      }
+      // Since we're using combined API, just mark as initialized
+      this.isInitialized = true;
+      this.useServerTTS = false; // We don't need separate TTS calls anymore
+      console.log("TTS Service: Initialized for browser fallback only");
     } catch (error) {
       console.error("TTS Service: Failed to initialize TTS:", error);
       // Fallback to browser speech synthesis
@@ -58,67 +43,9 @@ class TTSService {
         // Stop any currently playing audio
         this.stopAudio();
 
-        if (this.useServerTTS) {
-          console.log("Using Kokoro TTS with Nicole voice for Tanya:", text);
-          
-          // Try server-side TTS first
-          fetch('/api/tts', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text }),
-          })
-          .then(response => {
-            if (response.ok) {
-              return response.blob();
-            } else {
-              throw new Error('Server TTS failed');
-            }
-          })
-          .then(blob => {
-            const audioUrl = URL.createObjectURL(blob);
-            this.currentAudio = new Audio(audioUrl);
-            
-            this.currentAudio.onended = () => {
-              console.log("Kokoro TTS playback completed");
-              URL.revokeObjectURL(audioUrl);
-              this.currentAudio = null;
-              resolve();
-            };
-
-            this.currentAudio.onerror = (error) => {
-              console.error("Audio playback error:", error);
-              URL.revokeObjectURL(audioUrl);
-              this.currentAudio = null;
-              // Play error audio and fallback to browser TTS
-              this.playCustomAudio('error').then(() => {
-                this.fallbackToBrowserTTS(text, resolve, reject);
-              });
-            };
-
-            this.currentAudio.play().catch(error => {
-              console.error("Failed to play audio:", error);
-              URL.revokeObjectURL(audioUrl);
-              this.currentAudio = null;
-              // Play error audio and fallback to browser TTS
-              this.playCustomAudio('error').then(() => {
-                this.fallbackToBrowserTTS(text, resolve, reject);
-              });
-            });
-          })
-          .catch(error => {
-            console.error("Server TTS failed, falling back to browser TTS:", error);
-            // Play error audio and fallback to browser speech synthesis
-            this.playCustomAudio('error').then(() => {
-              this.fallbackToBrowserTTS(text, resolve, reject);
-            });
-          });
-        } else {
-          // Use browser TTS directly
-          console.log("Using browser TTS fallback for Tanya:", text);
-          this.fallbackToBrowserTTS(text, resolve, reject);
-        }
+        // Use browser TTS directly since we're using combined API
+        console.log("Using browser TTS fallback for Tanya:", text);
+        this.fallbackToBrowserTTS(text, resolve, reject);
 
       } catch (error) {
         console.error("Failed to play audio:", error);

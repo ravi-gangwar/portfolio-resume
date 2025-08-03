@@ -13,26 +13,15 @@ export function KeywordHighlight({
   variant = "primary",
 }: KeywordHighlightProps) {
   const variantStyles = {
-    primary:
-      "bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-700",
-    secondary:
-      "bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 border-purple-200 dark:border-purple-700",
-    accent:
-      "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700",
-    success:
-      "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border-green-200 dark:border-green-700",
-    warning:
-      "bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 border-orange-200 dark:border-orange-700",
+    primary: "font-bold text-blue-600 dark:text-blue-400",
+    secondary: "font-bold text-purple-600 dark:text-purple-400",
+    accent: "font-bold text-emerald-600 dark:text-emerald-400",
+    success: "font-bold text-green-600 dark:text-green-400",
+    warning: "font-bold text-orange-600 dark:text-orange-400",
   };
 
   return (
-    <span
-      className={cn(
-        "inline-flex items-center px-2 py-1 rounded-md text-xs font-medium border transition-all duration-200 hover:scale-105 hover:shadow-sm",
-        variantStyles[variant],
-        className
-      )}
-    >
+    <span className={cn("font-bold", variantStyles[variant], className)}>
       {children}
     </span>
   );
