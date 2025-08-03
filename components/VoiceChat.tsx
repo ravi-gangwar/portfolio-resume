@@ -158,16 +158,19 @@ export default function VoiceChat({ className }: VoiceChatProps) {
     }
 
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL || "", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: text,
-          chatHistory: chatHistory.slice(-5), // Send last 5 messages for context
-        }),
-      });
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_BACKEND_URL || "hehehh",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: text,
+            chatHistory: chatHistory.slice(-5), // Send last 5 messages for context
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
